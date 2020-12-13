@@ -34,6 +34,9 @@ public class QuizActivity extends AppCompatActivity {
     private static final String WRONG_ANSWER_KEY2 = "wrong_answer2";
     private static final String WRONG_ANSWER_KEY3 = "wrong_answer3";
 
+    private static final String SCORE_PERCENTAGE = "score";
+    private static final String NUMBER_OF_QUIZES = "number of quizes";
+
     private static final String QUESTION_KEY = "question";
 
     private static final String TAG = "QuizActivity";
@@ -66,8 +69,14 @@ public class QuizActivity extends AppCompatActivity {
     String wrongAnswerText2;
     String wrongAnswerText3;
 
+    String currentNumberOfQuizes;
+    String currentScorePercentage;
 
-   ArrayList<Integer> checkedList = new ArrayList<Integer>();
+
+   ArrayList<Integer> checkedList = new ArrayList<Integer>();           ///se salveaza id-urile de la intrebarile deja luate, pentru a nu se repeta
+
+    private int score = 0;
+
 
     private ArrayList<String> answers = new ArrayList<String>();
 
@@ -96,10 +105,10 @@ public class QuizActivity extends AppCompatActivity {
         questionNumber = findViewById(R.id.numberQuestions);
         questionNumber.setText("1/15");
 
-        correctAnswers = findViewById(R.id.corecte);
+        correctAnswers = findViewById(R.id.corecte);                /**Corespunde textului verde din quiz, numarul de raspunsuri corecte*/
         correctAnswers.setText("0");
 
-        wrongAnswers = findViewById(R.id.gresite);
+        wrongAnswers = findViewById(R.id.gresite);                  /**Corespunde textului rosu din text, numarul de raspunsuri gresite*/
         wrongAnswers.setText("0");
 
         mFire = FirebaseFirestore.getInstance();
@@ -112,6 +121,24 @@ public class QuizActivity extends AppCompatActivity {
         startTimer();
         updateQuestion();
 
+
+        FirebaseUser user = mAuth.getCurrentUser();                                                             /**Salveaza numarul curent de quiz-uri si scorul curent*/
+        DocumentReference docRef = mFire.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        currentNumberOfQuizes = document.getString(NUMBER_OF_QUIZES);
+                        currentScorePercentage = document.getString(SCORE_PERCENTAGE);
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
 
     }
@@ -211,7 +238,15 @@ public class QuizActivity extends AppCompatActivity {
 
     private int getRandomValue() {
         Random random = new Random();
+
+
+
         int x = random.nextInt(5);
+
+        while (checkedList.contains(x)) x = random.nextInt(17);         /**se asigura sa returneze id-ul unei intrebari care nu s-a mai afisat in textul curent*/
+
+        checkedList.add(x);
+
         return x+1;
     }
 
@@ -226,21 +261,24 @@ public class QuizActivity extends AppCompatActivity {
 
 
 
-
-    private void updateQuestionNumber()
-    {
-
-    }
-
-    private void fireStoreScoreUpdate()                                                                                         //Actualizeaza scorul retinut in firestore (ar trebui apelata la finalul testului)
+    private void fireStoreScoreUpdate(int score)                                         /**Actualizeaza scorul retinut in firestore (ar trebui apelata la finalul testului, in summary())*/
     {
         FirebaseUser user = mAuth.getCurrentUser();
 
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(user.getUid());
-
         Map<String, Object> map = new HashMap<>();
 
-        map.put("score", 1);
+        score = (score*100) / 15;
+
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(user.getUid());
+
+
+        int intScore = Integer.parseInt(currentScorePercentage);
+        int intQuizes = Integer.parseInt(currentNumberOfQuizes);
+
+        int finalScore = ((intScore * intQuizes) + score) / (intQuizes+1);
+
+        map.put("score", Integer.toString(finalScore));
 
         docRef.update(map);
 
@@ -260,6 +298,9 @@ public class QuizActivity extends AppCompatActivity {
             String newText = Integer.toString(questionNr);
 
             correctAnswers.setText(newText);
+
+            score++;
+
         }
         else
         {
@@ -278,11 +319,12 @@ public class QuizActivity extends AppCompatActivity {
     }
 
 
-    private void changeQuestion(boolean answer)
+    private void changeQuestion(boolean answer)         ///genereaza o noua intrebare
     {
         questionId++;
 
         if (questionId < 16) {
+
 
             uncheckAllRadioButtons();
 
@@ -292,7 +334,8 @@ public class QuizActivity extends AppCompatActivity {
         }
         else                                            ///s-a raspuns la toate intrebarile
         {
-            //stopQuiz()
+           summary();      //de implementat: lista cu toate intrebarile, raspunsul dat si raspunsul corect
+
         }
 
     }
@@ -307,9 +350,6 @@ public class QuizActivity extends AppCompatActivity {
 
         RadioButton check = sameText();
 
-        fireStoreScoreUpdate();
-
-
 
 
         if (check != null) {
@@ -317,9 +357,9 @@ public class QuizActivity extends AppCompatActivity {
             boolean goodAnswer = check.getText().equals(rightAnswerText);
 
             if (goodAnswer) {
-                Toast.makeText(this, "Corect!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Corect!", Toast.LENGTH_SHORT).show();
             }
-            else Toast.makeText(this, "Gresit!", Toast.LENGTH_SHORT).show();
+           // else Toast.makeText(this, "Gresit!", Toast.LENGTH_SHORT).show();
 
             changeQuestion(goodAnswer);
 
@@ -335,10 +375,6 @@ public class QuizActivity extends AppCompatActivity {
     private void updateQuestion() {
 
         int newIdQuestion = getRandomValue();
-
-        //while (checkedList.contains(newIdQuestion)) newIdQuestion = getRandomValue();
-
-        //checkedList.add(newIdQuestion);
 
 
         DocumentReference docRef = mFire.collection("question").document(Integer.toString(newIdQuestion));
@@ -380,6 +416,38 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
+
+    private void summary()
+    {
+        RadioButton check = sameText();
+        if(check.getText().equals(rightAnswerText)) score++;
+
+
+
+
+        fireStoreScoreUpdate(score);
+        numberOfQuizesUpdate(currentNumberOfQuizes); /**adauga si quiz-ul curent in baza de date*/
+        Toast.makeText(this, "summary", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void numberOfQuizesUpdate(String quizNumber)                    /**Mareste numarul de quiz-uri cu 1, deoarece odata apelata clasa, se incepe un quiz nou*/
+    {
+        int intQuizes = Integer.parseInt(quizNumber);
+
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        Map<String, Object> map = new HashMap<>();
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(user.getUid());
+
+        intQuizes++;
+
+        map.put(NUMBER_OF_QUIZES, Integer.toString(intQuizes));
+
+        docRef.update(map);
+
+    }
 
 
 }

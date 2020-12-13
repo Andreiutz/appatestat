@@ -32,7 +32,8 @@ public class SignUpActivity extends AppCompatActivity {
     EditText confirmPassword;
     String mUid;
 
-    int defaultScore = 0;
+    String defaultScore = "0";
+    String numberOfQuizes = "0";
 
     private FirebaseAuth mAuth;
     private static final String TAG = "SignUpActivity";
@@ -65,13 +66,14 @@ public class SignUpActivity extends AppCompatActivity {
      * @param uid         adds a new user to the firestore
      */
 
-    private void addUser(String name, String emailAdress, String uid, String password, int score) {
+    private void addUser(String name, String emailAdress, String uid, String password, String score, String numberOfQuizes) {
 
         Map<String, Object> user = new HashMap<>();
         user.put("name", name);
         user.put("email", emailAdress);
         user.put("password", password);
         user.put("score", score);
+        user.put("number of quizes", numberOfQuizes);
 
         // Add a new document with a generated ID
         db.collection("users").document(uid).set(user)
@@ -116,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                 String uid = user.getUid();
 
-                                addUser(name, emailAdress, uid, pass, defaultScore);
+                                addUser(name, emailAdress, uid, pass, defaultScore, numberOfQuizes);
 
                                 Intent intent = new Intent(SignUpActivity.this, MainPageActivity.class);
                                 finish();
