@@ -30,7 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText email;
     EditText password;
     EditText confirmPassword;
-    String mUid;
+
 
     String defaultScore = "0";
     String numberOfQuizes = "0";
@@ -39,7 +39,7 @@ public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignUpActivity";
     FirebaseFirestore db;
 
-    UserActivity userClass = new UserActivity();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

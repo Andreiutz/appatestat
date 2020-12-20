@@ -1,5 +1,7 @@
 package com.example.app;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -239,11 +242,9 @@ public class QuizActivity extends AppCompatActivity {
     private int getRandomValue() {
         Random random = new Random();
 
-
-
         int x = random.nextInt(5);
 
-        while (checkedList.contains(x)) x = random.nextInt(17);         /**se asigura sa returneze id-ul unei intrebari care nu s-a mai afisat in textul curent*/
+        while (checkedList.contains(x)) x = random.nextInt(16);         /**se asigura sa returneze id-ul unei intrebari care nu s-a mai afisat in textul curent*/
 
         checkedList.add(x);
 
@@ -251,7 +252,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
 
-    RadioButton sameText() {
+    RadioButton sameText() {                                /**returneaza radio button-ul selectat cand checkAnswer() este apelat*/
         if (answer1.isChecked()) return answer1;
         else if (answer2.isChecked()) return answer2;
         else if (answer3.isChecked()) return answer3;
@@ -427,7 +428,8 @@ public class QuizActivity extends AppCompatActivity {
 
         fireStoreScoreUpdate(score);
         numberOfQuizesUpdate(currentNumberOfQuizes); /**adauga si quiz-ul curent in baza de date*/
-        Toast.makeText(this, "summary", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "summary", Toast.LENGTH_SHORT).show();
+        showScore(score);
 
     }
 
@@ -446,6 +448,25 @@ public class QuizActivity extends AppCompatActivity {
         map.put(NUMBER_OF_QUIZES, Integer.toString(intQuizes));
 
         docRef.update(map);
+
+    }
+
+    private void showScore(int score)           /** Creeaza un dialog box in care este afisat scorul testului curent*/
+    {
+        score = (score*100) / 15;
+        AlertDialog alertDialog = new AlertDialog.Builder(QuizActivity.this).create();
+        alertDialog.setTitle("Rezultat: " + score + "%");
+        alertDialog.setMessage("Felicitari! Acum puteti incepe un test nou");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(QuizActivity.this, MainPageActivity.class);
+                        finish();
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
 
     }
 
