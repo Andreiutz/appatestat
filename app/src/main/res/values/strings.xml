@@ -19,4 +19,5 @@
     <string name="_15_00">15:00</string>
     <string name="aici_vine_intrebarea">Aici vine intrebarea</string>
     <string name="_15">/15</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 </resources>

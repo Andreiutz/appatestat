@@ -6,8 +6,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 public class MainPageActivity extends AppCompatActivity {
 
 
@@ -24,10 +22,9 @@ public class MainPageActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void logOutFunction(View view) {             /**Log Out button*/
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(MainPageActivity.this, SignInActivity.class);
-        finish();
+
+    public void settingsStart(View view) {
+        Intent intent = new Intent(MainPageActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 

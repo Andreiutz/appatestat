@@ -20,16 +20,16 @@
         app:layout_constraintVertical_bias="0.756" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/settingsButtonId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="logOutFunction"
-        android:text="@string/log_out"
+        android:onClick="settingsStart"
+        android:text="settings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.911"
+        app:layout_constraintHorizontal_bias="0.33"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintVertical_bias="0.275" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

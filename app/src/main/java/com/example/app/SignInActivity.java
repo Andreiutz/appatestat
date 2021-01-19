@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "SignInActivity";
@@ -59,6 +64,15 @@ public class SignInActivity extends AppCompatActivity {
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
+
+                                Map<String, Object> map = new HashMap<>();
+
+                                DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(user.getUid());
+
+                                map.put("password", password);
+
+                                docRef.update(map);
+
 
                                 Intent intent = new Intent(SignInActivity.this, MainPageActivity.class);
                                 finish();
