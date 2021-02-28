@@ -28,6 +28,7 @@ public class SignInActivity extends AppCompatActivity {
     EditText email;
     EditText password;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
