@@ -10,7 +10,7 @@ public class MainPageActivity extends AppCompatActivity {
 
 
 
-
+    //aia era
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
