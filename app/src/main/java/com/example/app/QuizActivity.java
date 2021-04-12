@@ -242,9 +242,9 @@ public class QuizActivity extends AppCompatActivity {
     private int getRandomValue() {
         Random random = new Random();
 
-        int x = random.nextInt(5);
+        int x = random.nextInt(24);
 
-        while (checkedList.contains(x)) x = random.nextInt(16);         /**se asigura sa returneze id-ul unei intrebari care nu s-a mai afisat in textul curent*/
+        while (checkedList.contains(x)) x = random.nextInt(24);         /**se asigura sa returneze id-ul unei intrebari care nu s-a mai afisat in textul curent*/
 
         checkedList.add(x);
 

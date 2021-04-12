@@ -6,6 +6,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText email;
     EditText password;
+    TextView signUpTextView;
 
 
     @Override
@@ -36,6 +38,7 @@ public class SignInActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         email = findViewById(R.id.editTextTextPersonName5);
         password = findViewById(R.id.editTextTextPassword);
+        signUpTextView = findViewById(R.id.signUpTextView);
     }
 
     public void updateUI(FirebaseUser user) {
@@ -116,6 +119,13 @@ public class SignInActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    public void onClickSignUp(View view)
+    {
+        Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+        finish();
+        startActivity(intent);
     }
 
 
