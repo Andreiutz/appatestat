@@ -33,14 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickSignUp(View view) {
         Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-        finish();
         startActivity(intent);
             
     }
 
     public void onClickSignIn(View view) {
         Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-        finish();
         startActivity(intent);
     }
 

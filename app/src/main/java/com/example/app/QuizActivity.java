@@ -252,7 +252,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
 
-    RadioButton sameText() {                                /**returneaza radio button-ul selectat cand checkAnswer() este apelat*/
+    private RadioButton sameText() {                                /**returneaza radio button-ul selectat cand checkAnswer() este apelat*/
         if (answer1.isChecked()) return answer1;
         else if (answer2.isChecked()) return answer2;
         else if (answer3.isChecked()) return answer3;
@@ -356,11 +356,6 @@ public class QuizActivity extends AppCompatActivity {
         if (check != null) {
 
             boolean goodAnswer = check.getText().equals(rightAnswerText);
-
-            if (goodAnswer) {
-                //Toast.makeText(this, "Corect!", Toast.LENGTH_SHORT).show();
-            }
-           // else Toast.makeText(this, "Gresit!", Toast.LENGTH_SHORT).show();
 
             changeQuestion(goodAnswer);
 

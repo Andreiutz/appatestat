@@ -3,7 +3,6 @@ package com.example.app;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,7 +60,7 @@ public class StatsActivity extends AppCompatActivity {
     private void setData() {
         FirebaseUser user = mAuth.getCurrentUser();
 
-        Toast.makeText(this, user.getUid(), Toast.LENGTH_SHORT).show();
+
 
         DocumentReference docRef = mFire.collection("users").document(user.getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -82,9 +81,9 @@ public class StatsActivity extends AppCompatActivity {
 
 
                         percentage.setText(String.format("%s%%", scoreString));
-                        name.setText(String.format("Nume: %s", userNameString));
+                        name.setText(String.format("Name: %s", userNameString));
                         email.setText(String.format("Email: %s", emailString));
-                        nrTest.setText(String.format("Numar teste: %s", quizString));
+                        nrTest.setText(String.format("No. quizes: %s", quizString));
 
 
                     }
