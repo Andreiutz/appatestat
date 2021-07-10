@@ -38,28 +38,26 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void changePassword(View view) {
         AlertDialog alerdDialog = new AlertDialog.Builder(SettingsActivity.this)
-                .setTitle("Schimbare parola?")
+                .setTitle("Change password?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         mAuth.sendPasswordResetEmail(mAuth.getCurrentUser().getEmail()).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(SettingsActivity.this, "Email de resetare parola trimis", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SettingsActivity.this, "Check email", Toast.LENGTH_SHORT).show();
                                     mAuth.signOut();
                                     Intent intent = new Intent(SettingsActivity.this, MainPageActivity.class);
                                     finish();
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(SettingsActivity.this, "Eroare", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SettingsActivity.this, "Error", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 })
-
-                // A null listener allows the button to dismiss the dialog and take no further action.
-                .setNegativeButton("NU", null)
+                .setNegativeButton("No", null)
                 .show();
     }
 

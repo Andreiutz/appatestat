@@ -111,8 +111,6 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                //Toast.makeText(SignUpActivity.this, "Bunai berea", Toast.LENGTH_SHORT).show();
-                                // Sign in success, update UI with the signed-in user's information
 
                                 FirebaseUser user = mAuth.getCurrentUser();
 
@@ -125,7 +123,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 startActivity(intent);
 
                             } else {
-                                //Toast.makeText(SignUpActivity.this, "Sign up failed!", Toast.LENGTH_SHORT).show();
+
                                 if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                     Toast.makeText(SignUpActivity.this, "You are already registered!", Toast.LENGTH_SHORT).show();
                                 } else {

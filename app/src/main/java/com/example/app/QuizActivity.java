@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class QuizActivity extends AppCompatActivity {
-    private static final long START_TIME_IN_MILLIS = 900000;
+    private static final long START_TIME_IN_MILLIS = 1800000;
 
     private static final String RIGHT_ANSWER_KEY = "right_answer";
     private static final String WRONG_ANSWER_KEY1 = "wrong_answer1";
@@ -146,7 +146,7 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
-    private void startTimer() {                                                         /**Creeaza timer-ul de pe ecran*/
+    private void startTimer() {                                    /**Creeaza timer-ul de pe ecran*/
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -242,9 +242,9 @@ public class QuizActivity extends AppCompatActivity {
     private int getRandomValue() {
         Random random = new Random();
 
-        int x = random.nextInt(24);
+        int x = random.nextInt(30);
 
-        while (checkedList.contains(x)) x = random.nextInt(24);         /**se asigura sa returneze id-ul unei intrebari care nu s-a mai afisat in textul curent*/
+        while (checkedList.contains(x)) x = random.nextInt(30);         /**se asigura sa returneze id-ul unei intrebari care nu s-a mai afisat in textul curent*/
 
         checkedList.add(x);
 
@@ -288,7 +288,6 @@ public class QuizActivity extends AppCompatActivity {
     private void updateNumberQuestionView(boolean answer)                                //creste contorul de intrebari corecte/gresite in functie
     {                                                                                                         ///de raspunsul dat
 
-
         int questionNr;
 
         if (answer)
@@ -320,7 +319,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
 
-    private void changeQuestion(boolean answer)         ///genereaza o noua intrebare
+    private void changeQuestion(boolean answer)                      ///genereaza o noua intrebare
     {
         questionId++;
 
@@ -333,9 +332,9 @@ public class QuizActivity extends AppCompatActivity {
 
             updateQuestion();
         }
-        else                                            ///s-a raspuns la toate intrebarile
+        else                                                                     ///s-a raspuns la toate intrebarile
         {
-           summary();      //de implementat: lista cu toate intrebarile, raspunsul dat si raspunsul corect
+           summary();                                                       //de implementat: lista cu toate intrebarile, raspunsul dat si raspunsul corect
 
         }
 
@@ -417,9 +416,6 @@ public class QuizActivity extends AppCompatActivity {
     {
         RadioButton check = sameText();
         if(check.getText().equals(rightAnswerText)) score++;
-
-
-
 
         fireStoreScoreUpdate(score);
         numberOfQuizesUpdate(currentNumberOfQuizes); /**adauga si quiz-ul curent in baza de date*/
